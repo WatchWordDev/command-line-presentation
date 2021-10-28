@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+# This file is meant to be sourced in a zsh environment
 
 function move-slide () {
   jq_filter='.[].tabs | .[].windows | .[] | select(.is_focused == false) | .id'
@@ -6,14 +6,14 @@ function move-slide () {
   kitty @ send-text -m id:$id $1
 }
 
-function sn () {
+function next-slide () {
   move-slide "n"
 }
 
-function sp () {
+function prev-slide () {
   move-slide "p"
 }
 
-function sx () {
+function exit-slide () {
   move-slide "x"
 }
