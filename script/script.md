@@ -6,6 +6,15 @@ you will see the repository for the things that I'll be
 talking about, today. All of the commands that I am going to
 use are listed in that directory.
 
+```
+x
+```
+
+The slides for this presentation are on the left, and I'll
+advance them as I go through the presentation. This whole
+presentation will be done from the command line: no
+browsers, no IDEs, no other things. Just the command line.
+
 # Slide 2
 
 As for an agenda, I'm going to be covering a variety of
