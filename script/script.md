@@ -1,816 +1,705 @@
 # Slide 1
 
-> Welcome to a presentation on using command line tools
-> for fun and profit. If you scan the QR code on the left
-> of the presentation, then you will see the repository
-> for the things that I'll be talking about, today. All
-> of the commands that I am going to use are listed in
-> that directory.
+Welcome to a presentation on using command line tools. If
+you scan the QR code on the left of the presentation, then
+you will see the repository for the things that I'll be
+talking about, today. All of the commands that I am going to
+use are listed in that directory.
 
 # Slide 2
 
-> As for an agenda, I'm going to be covering a variety of
-> command line tools that I use in my own day-to-day work,
-> even with available scripting languages like Python
-> lying around for me to use. The links to all of these
-> are in the README file of the repository. I'm going to
-> be showing you different command line utilities and
-> programs that potentially can help you unleash the
-> power of the command line because, sometimes, there's
-> no reason to open up another window. This presentation is
-> not for you to walk away an expert, but that you are
-> aware of tools that you can use to do interesting things
-> without relying on other languages that may not be on
-> machines that you interact with, or that you want to
-> just work on any Unix-like operating system.
+As for an agenda, I'm going to be covering a variety of
+command line tools that I use in my own day-to-day work,
+even with available scripting languages like Python lying
+around for me to use. The links to all of these are in the
+README file of the repository. I'm going to be showing you
+different command line utilities and programs that
+potentially can help you unleash the power of the command
+line because, sometimes, there's no reason to open up
+another window. This presentation is not for you to walk
+away an expert, but that you are aware of tools that you can
+use to do interesting things without relying on other
+languages that may not be on machines that you interact
+with, or that you want to just work on any Unix-like
+operating system.
 
 # Slide 3
 
-> The reason this particular subject came about is because
-> one of our alum who was in a professional development
-> class that I was teaching saw me use some command line
-> tools that they'd never seen before. That particular
-> lecture was on dynamic programming, an algorithm design
-> strategy that can reduce the number of computations from
-> exponential to linear. I'm going to show you what I mean.
-
-```
-cd code/ackermann
-./ackermann.py -h
-```
-
-> Here's the definition of a very interesting function in
-> algorithm design, one called the Ackermann function. It
-> grows really fast based on the first argument. Really,
-> really fast. I'm going to have it calculate the Ackermann
-> number for 3, 6, which is the largest Ackermann number
-> I can calculate using a naive implementation without
-> getting a stack overflow error.
-
-```
-clear
-./ackermann.py 3 6
-```
-
-> A rather small total, to be sure. In talking about this
-> algorithm, I would like to know what values it calculated.
-> I'll do the same but have it print out each calculation
-> that it performs.
-
-```
-clear
-./ackermann.py -v 3 6
-```
-
-> Well, that printed out a lot of calculations. I would like
-> to know how many calculations were performed. The first
-> thing I'm going to do is filter the output so that I get
-> only lines that contain Ackermann and not the last line.
-> I will use the command line tool `grep` to do that.
-
-```
-«don't hit enter, yet»
-clear && ./ackermann.py -v 3 6 | ggrep Ackermann
-```
+This entire presentation is being run from a terminal
+emulator named "kitty". If you're looking for a new terminal
+emulator, or just want to try one out, and you're on Linux
+or macOS, I would recommend trying out **kitty**. I've been
+using it, now, for about a year and really enjoy its
+stability, the extensibility, its speed, and its low memory
+usage.
 
 # Slide 4
 
-> In case you have never done this on the command line, the
-> pipe ("|") operator takes the text printed to the output
-> from the program on the left and makes it the standard input
-> for the command on the right. It's as if the computer is
-> typing the output from the thing on the left as the input for
-> the thing on the right. Let me show you an example.
-
-```
-«clear the command line»
-tput cols
-```
-
-> The `tput` utility outputs information about the terminal.
-> In this case, I've asked it to report the number of text
-> columns in the current terminal. What if I want to calculate
-> half of the number of columns in the terminal. There's
-> another program called `bc`, which stands for "basic
-> calculator". I can type `bc`, and then do math in it.
-
-```
-bc
-125 / 2
-```
-
-> You can see that by typing "125 / 2", the `bc` program
-> calculated the quotient.
-
-```
-quit
-```
-
-> Finally, there a program named `echo` that prints its
-> input to the output, literally echoing what it was given.
-
-```
-gecho "$(tput cols) / 2"
-```
-
-> The dollar-sign-parentheses runs the command and
-> interpolates the result into the string. Now, what I'd
-> like to do is use the output of one program
-> to be the input of another program. I can do that with
-> `echo` and `bc`.
-
-```
-gecho "$(tput cols) / 2" | bc
-```
-
-> And, there we go, we have calculated half of the number
-> of columns using the pipe operator. Mind you, there are many
-> other ways to do this. I just wanted to make sure you
-> understood the pipe operator.
+The majority of the command line utilities that I use,
+today, are from the GNU project. If you're on Linux, these
+come preinstalled. If you're on macOS, you can install these
+packages using Homebrew. If you're on Windows, you can use
+WSL2 or MinGW. I'm on macOS, right now, so when I type the
+commands, I'm going to put the letter "g" in front of them.
+That's because macOS has its own outdated version of these
+tools. For example,
 
 ```
 clear
-«do not hit enter»
-./ackermann.py -v 3 6 | grep Ackermann
+man tail
 ```
 
-> In this command, the output of the `ackermann.py` program,
-> all of the text that you saw for each of the calcs, becomes
-> the input of the `grep` program on the right. `grep` only
-> returns lines that match the pattern given to it, in this
-> case, the word "Ackermann".
+This is the manual page for the tail utility on macOS, the
+one that comes with macOS. If I scroll to the bottom, you'll
+see that it was last updated in 2006. Now,
 
 ```
-«hit enter»
+q
+man gtail
 ```
 
-> You can see that the last line of output which showed the
-> Ackermann number did not appear because it did not contain
-> the word "Ackermann" in it. Now, I want to get a count of the
-> lines. There's a utility for that called `wc` which stands
-> for "word count".
+I'm looking at the help manual for the GNU utility that I
+installed using Homebrew. If I scroll to the bottom, you can
+see that it was last updated just a couple of months ago.
+But, to prevent naming collisions, the Homebrew package
+installs the GNU utilities with the "g" prefix.
 
 ```
-clear
-./ackermann.py -v 3 6 | ggrep Ackermann | gwc -l
+q
 ```
 
-> When I give the `wc` program the `-l` flag, it tells it to
-> count lines rather than words. You can see that it took
-> 172,233 calculations for this result. Because of the
-> recursive nature of the program, I know that there are
-> points when the same calculation is made. I'd like to
-> investigate that. What'd I'd like to know is how many
-> unique calculations were made. I'm going to use the word
-> count utility, again, but add in two new ones: `sort` to
-> sort the output, and `uniq` to deduplicate lines. I have to
-> sort it because `uniq` only finds duplicate lines that are
-> next to each other.
+So, on macOS, I will use the command `gtail` rather than
+just `tail`. When I say I'm going to use `tail` and you see
+me type `gtail`, that's the reason.
 
-```
-clear
-./ackermann.py -v 3 6 | ggrep Ackermann | gsort | guniq | gwc -l
-```
-
-> Interestingly, of the 172,233 calculations, only 1,277 are
-> unique! That's less than 10% of the original number of
-> calculations! I can use uniq to count the number of occurrences
-> of each unique line, too. So, I'll do that and sort it, again,
-> to see how many times each function call gets made.
-
-```
-clear
-./ackermann.py -v 3 6 | ggrep Ackermann | gsort | guniq -c | gsort
-```
-
-> Just take a look at these numbers! The Ackermann function calculates
-> the value of Ackermann(0, 1), (0, 2), (1, 0), and (1, 1) each 494
-> times! That's a ludicrous amount of processing for something that
-> only has 1,277 unique calculations. Of course, we could fix that.
-> The idea behind dynamic programming is to cache each of those
-> intermediate calculations, so that there's not hundreds of repeat
-> calculations, but instead, each calculation is only performed once.
-> If I add the `-c` flag to the **ackermann.py** script, it will use
-> dynamic programming.
-
-```
-clear
-./ackermann.py -c -v 3 6 | ggrep Ackermann | gsort | guniq -c | gsort
-```
-
-> You can see that it now only calculates each step once. I can make
-> sure that the number of calculations is the number of unique steps
-> by checking the line count, again, of the output.
-
-```
-clear
-./ackermann.py -c -v 3 6 | ggrep Ackermann | gwc -l
-```
-
-> And, sure enough, only 1,277 calculations were made.
 
 # Slide 5
 
-> So, to check the calculations made by the function, I used `grep`
-> to filter, `wc` to count the lines of output, `sort` to sort lines
-> of output, and `uniq` to remove duplicate lines, as well as count
-> duplicates.
-
-# Slide 6
-
-> You may have noticed that when I typed those utility names on my
-> Mac, I prefixed each of them with the letter "g". That's because
-> I'm using the GNU utilities installed with Homebrew. Why use
-> these instead of the ones that come with my macOS distribution?
-> Let's take a look at the manual entries for the `uniq` utility to
-> see why.
+I just want to spend a moment talking about how the command
+line works. Every program has a thing called "standard in"
+that can allow a person to type in some input. Every program
+has two ways to print out results, one called "standard out"
+that prints out results, and one called "standard error"
+that prints out errors. Let's see that in action.
 
 ```
 clear
-man uniq
+man rev
 ```
 
-> If I go to last line of the manual entry, then I can see that this
-> version of the unique command was created in December 2009. Now, if
-> I look at the one with the "g" prefix,
+There's a utility called `rev` that reverses characters in a
+file. However, if you read the last sentence in this, it
+says "If no files are specified, the standard input is
+read." Let's see how that works.
+
+```
+q
+rev
+```
+
+I didn't specify a file, so the program is just waiting for
+text from standard in. If I type some text and hit "Enter",
+the program reads that value and does something with it.
+
+```
+Hello
+```
+
+You can see, that the reverse program has done just what the
+manual page reported that it would.
+
+```
+Good-bye
+```
+
+This program is reading from standard in and writing to
+standard out.
+
+# Slide 6
+
+The command line allows us to hook up the standard out of
+one program to the standard in of another using the pipe
+character. Let's see how that works.
+
+```
+gecho Hello
+```
+
+When I use the command `gecho`, it just echoes what I give
+it as an argument.
+
+```
+gecho Hello | rev
+```
+
+If I follow this with a pipe and the `rev` utility, then the
+output from gecho becomes the input for the rev function.
+You can see the output of this combined command is just the
+output of the last utility, the `rev` command.
+
+# Slide 7
+
+If I add one more `rev` to this, it reverses the reversed
+text
+
+```
+gecho Hello | rev | rev
+```
+
+and gives me back the original message, as you would expect.
+
+The outptut from `echo` becomes the input for the first
+`rev` invocation. The output of the first `rev` invocation
+becomes the input for the second `rev` invocation. And, the
+output of the second `rev` invocation becomes the output
+printed to the screen.
+
+# Slide 8
+
+The reason this talk came about was during a lecture that I
+gave in an algorithms class, one of our alumni was intrigued
+by the commands that I was using to investigate the
+performance of Fibonacci calculations. I have an
+implementation, here.
+
+```
+clear
+./code/fibonacci.py -h
+```
+
+I'm going to go through those steps, again, to show you the
+utilities that I was using because these are some good basic
+utilities to have when you want to analyze the debugging
+output of a program.
+
+```
+clear
+./code/fibonacci.py -v 8
+```
+
+If I run this utility to calculate the eighth Fibonacci
+number and the verbose flag on, it prints out all of the
+intermediate calculations that it made. Because there were
+so many, the output fills up more than one screen. I'm going
+to use a utility function to help output this in a more
+reasonable manner.
+
+```
+clear
+./code/fibonacci.py -v 8 | column
+```
+
+Now, I can see all of the calculations that went into the
+final calculation.
+
+```
+«CTRL+SHIFT+h»
+/Fibonacci\(2\)
+«UP arrow»
+```
+
+If I search for "Fibonacci(2)" in the output, you can see
+that the the second Fibonacci number was calculated 13
+times. I'd like to figure out how many times each of those
+calculations were done and list them. The first thing I'll
+do is sort the output using the sort utility.
+
+```
+clear
+./code/fibonacci.py -v 8 | gsort | column
+```
+
+You can see that the output is now sorted. Now, I'd like to
+just see the unique lines with a count of how many times
+they appear. There's a utility for that, too, the `uniq`
+utility.
+
+```
+clear
+./code/fibonacci.py -v 8 | gsort | guniq | column
+```
+
+You can see that the `uniq` utility removed all of the
+duplicate lines. Let's look at the manual page for it,
+really quick.
 
 ```
 man guniq
 ```
 
-> I see that it's from September of this year! The GNU utilities are
-> almost always ahead of their BSD counterparts. Because of that, I
-> install the listed packages over on the left onto my computer. Let's
-> take a look at what the Homebrew entry reports for the coreutils
-> package.
+An important thing to note, here, is that it only removes
+adjacent matching lines. If I didn't sort the output, ...
 
 ```
 clear
-brew info coreutils
+./code/fibonacci.py -v 8 | guniq | column
 ```
 
-> There on that line is the message that all of the utilities that
-> the package installed are installed with a "g" prefix. They do that
-> so that programs that rely on the BSD versions of these utilities
-> don't break. That just means typing the extra letter "g" in front
-> of each of the programs that I want to use. If you're on Linux, then
-> they'll just be the normal names of the programs with no "g" prefix.
-> I'm going to use utilities from each of these packages. That's why I
-> include their names, here.
-
-# Slide 7
-
-> While I have this brew information open, I'd like to talk just a
-> moment about the terminal emulator that I'm using. It's called
-> "kitty". I like it a lot. It does some pretty cool things. For
-> example, there's a keyboard shortcut to highlight the URLs that are
-> in the window.
-
-**Press CTRL+SHIFT+E**
-
-> You can see that the URLs are now highlighted and numbered. I can now
-> press the number associated with a URL to open it in the browser.
-
-**Press 2**
-
-**Let the browser window open**
-
-**Go back to terminal**
-
-> I can also click, if I really want to, with my mouse.
-
-**Click the link to open the browser window.**
-
-**Go back to the terminal**
-
-> I know that choosing a terminal emulator is a very personal decision.
-> A lot of people like iTerm2 for macOS. A lot of people like Alacrity
-> for supporting all modern OSes. I like Kitty which supports macOS and
-> Linux. One of the things I like about Kitty is that I can control
-> aspects of it from the command line. For example, if I want to change
-> the colors of the window for a moment, I can do it with a command.
-
-```
-kitty @ set-colors foreground=magenta background=darkgray
-```
-
-That's not nice, but it's a drastic example.
-
-```
-kitty @ set-colors --reset
-```
-
-> Kitty can also allow you to control other aspects of the window. For
-> example, I can create a new window in this tab.
+... then there are no adjacent matching lines, so the `uniq`
+utility doesn't remove anything. Back to the good output,
+...
 
 ```
 clear
-kitty @ new-window
+./code/fibonacci.py -v 8 | gsort | guniq | column
 ```
 
-> You can see that there's a new window that contains a new shell. You
-> can script things like window visuals, too, like setting the background
-> image of the OS window.
-
-```
-cd «repo»
-kitty @ set-background-image slides/term_bkg.png
-CTRL+C
-clear
-exit
-```
-
-> Hello, Sock Puppet and Trash Panda. It also allows me to show images
-> inline using its extensibility mechanisms called kittens. It's openly
-> scriptable! There's a kitten called "icat" which shows images directly
-> in the terminal. That's how I'm showing the slides on the left of this
-> presentation, right now.
+... this shows the unique calculations that were performed,
+but not the count. But, because this is such a common thing
+to do, the `uniq` utility has a command line argument, `-c`,
+which counts the repeated lines that it's removing.
 
 ```
 clear
-kitty +kitten icat --align left slides/06-slide.png
+./code/fibonacci.py -v 8 | gsort | guniq -c | column
 ```
 
-> You can write your own scripts using Python to perform your own
-> custom actions in the terminal. For example, there's a built-in file
-> diff kitten, too, that does very nice file diffing.
-
-```
-clear
-kitty +kitten diff data/left.txt data/right.txt
-```
-
-> There's a whole lot more to kitty, and I'd recommend investigating
-> it if you want to try a different fast and responsive terminal
-> emulator. It's time to say good-bye to Sock Puppet and Trash
-> Panda.
-
-```
-kitty @ set-background-image none
-clear
-```
-
-# Slide 8
-
-> We saw earlier how to open URLs from kitty into a browser window.
-> But, this is the command line; I'd really like to stay in the
-> command line. Luckily, there are a couple of text-based browsers
-> that runs right here in the terminal. I use one called lynx.
-
-```
-lynx
-```
-
-> That opens to my homepage, which is the Duck Duck Go search engine.
-
-```
-q
-y
-```
-
-> I can also open a Web page by passing it as a command line argument.
-
-```
-lynx curtis.schlak.com
-```
-
-> Here, I can read content of the Web site, navigate around, download
-> images, and fill out forms and stuff. There's no JavaScript, here,
-> and I find it very interesting to see what happens on Web sites that
-> use JavaScript.
-
-```
-q
-y
-clear
-brew info coreutils
-```
-
-> What I'd like to do is have a command line command that gets the first
-> URL in the output from the brew info command and open that with lynx.
-> I could use `grep` to filter the output, but links may appear anywhere
-> in this output, so that's not a robust solution.
+Now, I can see the number of times that each of those lines
+appeared. I can see that the first Fibonacci number was
+calculated 21 times, and the third Fibonacci number was
+calculated eight times. If I increase the Fibonacci number
+that I'm calculating...
 
 ```
 clear
-brew info --help
+./code/fibonacci.py -v 12 | gsort | guniq -c | column
 ```
 
-> If I look at the help documentation of `brew info`, I see that there's
-> an option to output the help in JSON format. I'm going to take a look at
-> that.
+Now, I can see that the third Fibonacci number was
+calculated 55 times. If I want to know the total number of
+calculations that it takes...
 
 ```
 clear
-brew info --json coreutils | bat -l json
+./code/fibonacci.py -v 12 | wc -l
+./code/fibonacci.py -v 12 | gsort | guniq -c | column
 ```
 
-> Sure enough, it emits structured output that contains the information
-> about the formula. I'm using another utility called `bat` that can
-> highlight output for a language. You can see that the output represents
-> an array that contains an object that has a property named "homepage"
-> that contains the URL that I'm looking for.
+I can use the `wc` utility which, when given the `-l`
+command argument, counts the number of lines that was output
+by a program. There were 465 calculations to figure out the
+twelfth Fibonacci number. It's one less than 466 because the
+result 144 is also counted as part of the output. I can use
+another utility called `grep` which searches for patterns
+and, if they match, will only print the lines that match. I
+only want the lines of the output that contain the word
+"Fibonacci" in them, so I can use `grep` to filter only
+those lines.
+
+```
+./code/fibonacci.py -v 12 | ggrep Fibonacci | wc -l
+./code/fibonacci.py -v 12 | ggrep Fibonacci | gsort | guniq -c | column
+```
+
+Now, that extra line that contained only the result is gone,
+I get the correct number of calculations, and I see only the
+calculations without the result.
 
 # Slide 9
 
-> Here's my process. What I want, now, is a way to work with JSON from the
-> command line. Thankfully, there is a command line tool for working with
-> JSON called `jq`.
-
-```
-clear
-jq --help | bat
-```
-
-> This seems like exactly what I want, a way to interact with JSON on the
-> command line. I will pipe the output from the `brew info` into `jq` and
-> select the "homepage" property.
-
-```
-clear
-brew info --json coreutils | jq '.[].homepage'
-```
-
-> Now that I have the output, I'd like to use `lynx` to open it. So far,
-> I've been using the pipe operator to pass output from one program to
-> the input of the next. I'm going to try that with `lynx`.
-
-```
-clear
-brew info --json coreutils | jq '.[].homepage' | lynx
-```
-
-> That didn't work because `lynx` doesn't want the URL as input from the
-> program, but as an argument!
+You can use these utilities to filter files, counte how many
+times things occur in them, remove duplicate lines, and sort
+the lines. These are all really handy utilities. I used
+`grep` to filter, `wc` to count the lines of output, `sort`
+to sort lines of output, and `uniq` to remove duplicate
+lines, as well as count duplicates.
 
 # Slide 10
 
-> Instead of input being piped directly into the program, what I really
-> want is for the output of one program to become the command line
-> argument of the next program. That's where the `xargs` utility comes
-> into play.
+Because I'm on a Mac, I use Homebrew to manage the packages
+on my computer. If you're on Linux, you likely use your
+distro's package manager or Homebrew or some other package
+manager. If you're on Windows, who knows what you use,
+though Windows 11 has an okay solution. When I want the
+information about a package, I can use the Homebrew package
+manager to tell me about it. For example, I installed a fun
+utility named `figlet` that produces ASCII art from words.
 
 ```
+figlet Hello
+```
+
+If I want information about `figlet`, I use the `brew info`
+command.
+
+```
+brew info figlet
+```
+
+In that information, I can see the homepage URL, figlet.org.
+Because I'm in **kitty**, I can just click on the link and
+it'll open in my default browser. The `brew info` command
+will also open the GitHub Web page that contains the Ruby
+script that will install the package.
+
+```
+brew info --github figlet
+```
+
+That's fine and all, but what I really want is a command to
+open the homepage so I can read documentation and stuff. If
+I look at the help for the `brew info` command, ...
+
+```
+brew info --help
+```
+
+I see that there is a `--json` flag that will output the
+information for the package formatted as JSON. Let's see
+what that produces.
+
+```
+brew info --json figlet
+```
+
+When something spits out a lot of text like this, I will
+turn to a program called "a pager" that shows the output
+one screen at a time. A lot of you probably know about
+`less`.
+
+```
+brew info --json figlet | less
+```
+
+This page allows me to scroll around and whatnot. However,
+there are more modern alternatives that do things like
+syntax highlighting. I'm going to use one called `bat`.
+
+```
+q
+brew info --json figlet | bat -l json
+```
+
+Now, I get colors for different kinds of values, and line
+numbers! I see what I want, so one moment, please.
+
+```
+q
 clear
-man gxargs
+brew info --json figlet | bat -l json -H 15
 ```
 
-> The `xargs` utility takes values piped into it and turns it into command
-> line arguments for you.
-
-```
-«q»
-clear
-«do not hit enter»
-brew info --json coreutils | jq '.[].homepage' | gxargs lynx
-```
-
-> The `xargs` utility will take the output of the `jq` program which is the
-> URL that I want to open, and make that the command line argument of the
-> command given, in this case, `lynx`.
-
-```
-«hit enter»
-```
-
-> And, there we are. It now opens `lynx` with the URL of the homepage for
-> the brew package. If I wanted to turn this into a program so I didn't
-> need to type the full command line every time, I can do that with some
-> simple shell scripting.
-
-```
-bat ./code/brew-lynx.sh
-```
-
-> The first line has something called a hash-bang which tells the shell to
-> execute this script with a particular program. In this case, it runs
-> `/usr/bin/env sh` to find a shell program and execute it in the user's
-> environment. For example, let's take a look at the first line of the
-> Ackermann script from earlier in the presentation.
-
-```
-clear
-bat ./code/ackermann/ackermann.py
-```
-
-> You can see the first line of the script uses the `/usr/bin/env` utility
-> to find the `python3` program in my environment and run the `ackermann.py`
-> script using Python 3. Okay, back to the `brew-lynx.sh` script.
-
-```
-clear
-bat ./code/brew-lynx.sh
-```
-
-> Lines 3 through 8 are just checking to make sure that the first argument
-> to the script actually exists. Then, there's the big command on line 9.
-> You can see that the term "$1" refers to the first command to the script
-> which will be the package name for use by `brew info`. Now, if I add that
-> to my path, it will be available anywhere to me.
+The `bat` utility also supports highlighting lines, which is
+really neat. You can see, here, that the homepage for the
+package is the value of the homepage property of this
+object. And, if you look at line 1, you'll see that the JSON
+top-level object is an array.
 
 # Slide 11
 
-> The tools that I used to do this were `jq` for handling JSON-formatted
-> output, `xargs` to build command lines from the output of another file,
-> `bat` to view the syntax-highlighted contents of text files, ...
+Now that I know there's a structured JSON output that I can
+use, here's my plan on the command that I'd like to write.
+There is a utility that understands JSON on the command
+line, and its name is `jq` which stands for "JSON query".
+
+```
+q
+clear
+brew info --json figlet | jq
+```
+
+I can use `jq` to select the object from the first value in
+the array, then select the "homepage" property from it using
+dot notation.
+
+```
+clear
+brew info --json figlet | jq '.[0].homepage'
+```
+
+There we go. Now, I have just the URL for the package. What
+I'd like now, is to open that in a browser. On macOS,
+there's the `open` command; on Linux, there's the `xdg-open`
+command; and, on Windows, there's the `start` command. So,
+I'll use the `open` command for this.
+
+```
+brew info --json figlet | jq '.[0].homepage' | open
+```
+
+But, when I do this, I get an error.
 
 # Slide 12
 
-> ... the hashbang syntax to indicate which program should run a script,
-> and the $-number syntax to indicate the value of the positional
-> command line arguments for the script.
+The `open` command does not read from standard in. In
+expects the URL to be a command line argument. So, I need
+another utility to intercept the input from standard in and
+create a command line for me.
 
 # Slide 13
 
-> Something I'm occasionally interested in doing is seeing the statuses
-> of the Git repos I have in my development directory. I could just go
-> into each directory and type out the commands, but that takes too much
-> time, > especially when I can use the command line tools to do this for
-> me. Also, I have Git repositories all over my computer. I'd like to
-> just automatically search for them, if possible. With that in mind,
-> the first step is to find each of the _.git_ directories because
-> where those are, there's a Git repository.
+Again, because this is such a common problem, that utility
+exists and is called `xargs` which stands for "execute with
+arguments". Here, the output of `brew info` is JSON which
+gets piped to `jq` which selects the homepage and outputs
+the URL. When that is fed into `xargs`, it takes what comes
+in via standard in and makes that the command line arguments
+for whatever other command you tell it to run. That's exactly
+what I need, take the URL from the `jq` output and make that
+the command line argument to the `open` command.
+
+```
+brew info --json figlet | jq '.[0].homepage' | gxargs open
+```
+
+And, now, I have a command that can open the homepage for
+me. While that's great, and all, it's not very reusable. To
+make it reusable, I could turn it into a script file or a
+shell function. As a matter of fact, I already have it!
+
+```
+«open the aliases file that contains `brew-show()`»
+```
+
+You can see the function, here, which is exactly what I had
+on the command line. These backslashes allow me to continue
+a command on the next line. The "$1" is the first parameter
+given the function. So, I can use this in my shell, now,
+after I load it.
+
+```
+q
+clear
+brew-show figlet
+```
 
 # Slide 14
 
-> Step one is to find all of the .git directories. Luckily, finding
-> files and directories by name or pattern is easy with the `find`
-> utility.
-
-```
-clear
-gfind «dir with lots of repos» -type d -name '.git'
-```
-
-> The syntax is pretty simple. You tell the `find` utility which
-> directory to search in as the first argument, then tell it what
-> you're looking for. In my case, I'm searching for things of type
-> "d", which means "directory", and with the name ".git". You'll
-> notice that it took quite a while to do that. That's because some
-> of those projects are Node.js projects, which means there are
-> hundreds or thousands of nested directories to search through
-> in the "node\_modules" directory. I'd like to tell `find` to
-> ignore those directories. To do that, I use the "prune" flag in
-> a separate grouping using parentheses.
-
-```
-clear
-gfind «dir with lots of repos» \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' \)
-```
-
-> You'll see that runs almost instantly because `find` is pruning
-> the search from the "node\_modules" directories. But, it's now
-> printing the ".git" and the "node\_modules" directories. I want
-> it to only print the ".git" directories. I will add a "-print"
-> command to the last clause.
-
-```
-clear
-gfind «dir with lots of repos» \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' -print \)
-```
+Here are the tools that I used in this section. I used `jq`
+to parse and manipulate the JSON. I used `xargs` to build a
+command for a utility that needs command line arguments. I
+used `bat` to view output and files with syntax
+highlighting.
 
 # Slide 15
 
-> Now, that prints just the Git directories which is what I wanted.
-> It'd be great to run the `git status` command from those directories
-> to get the remote for the repository. Luckily, `find` has an "execdir"
-> argument that I can use to do just that.
-
-```
-clear
-gfind «dir with lots of repos» \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' -print \) -execdir git status -s \;
-```
-
-> This will run the `git status -s` command in the directories that matched
-> the `find` command.
+Something I'm occasionally interested in doing is seeing the
+statuses of the Git repos I have in my development
+directory. I could just go into each directory and type out
+the commands, but that takes too much time, > especially
+when I can use the command line tools to do this for me.
+Also, I have Git repositories all over my computer. I'd like
+to just automatically search for them, if possible. With
+that in mind, the first step is to find each of the _.git_
+directories because where those are, there's a Git
+repository.
 
 # Slide 16
 
-> If there are modifications in the repository, I'd like to take all of the
-> lines and collapse them into a single line. Earlier, I used the `uniq`
-> command to remove duplicate lines. What I want to do is take these lines
-> that contain the changes and turn them into a single message line. I'm
-> going to use a new command to do this, a command called `sed` which means
-> "stream editor". It allows you to do complex substitutions on input. Let
-> me please provide an example. Here's the content of one of those files
-> that I diffed earlier.
+Step one is to find all of the .git directories. Luckily,
+finding files and directories by name or pattern is easy
+with the `find` utility.
 
 ```
 clear
-bat data/sed-example.csv
+gfind dir -type d -name '.git'
 ```
 
-> Here's a file that contains comma separated values. I'm going to open
-> it in another program so that we can see it better.
-
-```
-sc-im data/sed-example.csv
-```
-
-> Here's a tabular view of the data. I'd like to change these "no" and
-> "yes" values to 0s and 1s, and remove these weird symbols. I can use
-> `sed` to do this.
-
-```
-clear
-cat data/sed-example.csv | gsed 's/1-Yes/1/g'
-```
-
-> This searches each line for the value "1-Yes" and replaces it with "1".
-> The "s" means "substitute" and the "g" means "global", which will replace
-> all occurrences in the line. Without the "g", it would only replace the
-> first match. I can just add another `sed` command for the "No" entries.
+The syntax is pretty simple. You tell the `find` utility
+which directory to search in as the first argument, then
+tell it what you're looking for. In my case, I'm searching
+for things of type "d", which means "directory", and with
+the name ".git". You'll notice that it took quite a while to
+do that. That's because some of those projects are Node.js
+projects, which means there are hundreds or thousands of
+nested directories to search through in the "node\_modules"
+directory. I'd like to tell `find` to ignore those
+directories. To do that, I use the "prune" flag in a
+separate grouping using parentheses.
 
 ```
 clear
-cat data/sed-example.csv | gsed 's/1-Yes/1/g' | gsed 's/2-No/0/g'
+gfind dir \( -type d -name 'node_modules' -prune \) \
+        -o \( -type d -name '.git' \)
 ```
 
-> Now, I just want to replace the weird symbol with nothing.
-
-```
-clear
-cat data/sed-example.csv | gsed 's/1-Yes/1/g' | gsed 's/2-No/0/g' | gsed 's/†//g'
-```
-
-> And, now the file is cleaned. I could save this to a new file and
-> work with that. I want to do the same thing, replace values in
-> lines from the Git statuses.
+You'll see that runs almost instantly because `find` is
+pruning the search from the "node\_modules" directories.
+But, it's now printing the ".git" and the "node\_modules"
+directories. I want it to only print the ".git" directories.
+I will add a "-print" command to the last clause.
 
 ```
 clear
-gfind «dir with lots of repos» \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' -print \) -execdir git status -s \;
-```
-
-> I want to replace all of these status lines with a message so that
-> I can use `uniq` to remove the duplicates. When I look at these lines,
-> I want to replace any line that begins with a space or a question mark.
-> So, I'll use `sed` to find that line using a regular expression, and
-> replace it with a standard message.
-
-```
-clear
-«talk through the regex when you type it»
-«don't hit enter»
-gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' -print \) -execdir git status -s \; | gsed 's/^[ ?].*/unmerged/g'
-```
-
-> The first caret means look at the beginning of the line. Then, I use
-> the square brackets to allow it to choose from one or more different
-> characters. I'm going to specify a space or a question mark. Then, I
-> want it to select anything to the end of the line, which I can do with
-> the period that matches any character, and the asterisk to select zero
-> or more occurrences. Then, I specify to take that match and replace it
-> with the value "unmerged". Let's take a look at the output.
-
-```
-«enter»
-```
-
-> I'm going to make sure that I haven't messed anything up, that things
-> are properly replaced. I'd like to take the output of the `find` statement
-> and save it to a file AND continue to continue passing the output to the
-> `sed` statement. I can do that with the `tee` command. This way, I can
-> use a diff to make sure that I'm not replacing anything incorrectly.
-
-```
-clear
-gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' -print \) -execdir git status -s \; | gtee find-result.txt | gsed 's/^[ ?].*/unmerged/g' | gtee sed-result.txt
-ls
-```
-
-> Now, you can see that there are find-result.txt and sed-result.txt files.
-> I'll run a diff to make sure that the correct lines were replaced.
-
-```
-kitty +kitten diff find-result.txt sed-result.txt
-```
-
-> You can see the lines that I wanted to replace are now replaced. Now, I'd
-> like to remove all of the duplicate "unmerged" lines. I'll save that output
-> to a file, too, to make sure that things are getting properly reduced.
-
-```
-clear
-gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' -print \) -execdir git status -s \; | gtee find-result.txt | gsed 's/^[ ?].*/unmerged/g' | gtee sed-result.txt | guniq | gtee uniq-result.txt
-```
-
-> Now, I'm going to diff the original with the `uniq` result. I do this so
-> often, I've aliased this command.
-
-```
-clear
-kdiff find-result.txt uniq-result.txt
-```
-
-> You can see that all of those original messages are now reduced to a
-> single message. I'm going to do one more thing, and get rid of that
-> "/.git" at the end of each of those directory names. Again, I'll use
-> `sed` for that. The command line is starting to get a little long, eh?
-> You can use the backslash character to tell the shell that you're going
-> to continue the content on the next line. So, let me reformat this and
-> add the command to replace the "/.git".
-
-```
-clear
-gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' -print \) -execdir git status -s \; | \
-    gtee find-result.txt | \
-    gsed 's/^[ ?].*/unmerged/g' | \
-    gtee sed-result.txt | \
-    guniq | \
-    gtee uniq-result.txt | \
-    gsed 's/\/.git//g'
-```
-
-> Because I'm using the forward slash as the delimeter in the `sed`
-> replacement, that is the slashes separate the pattern to replace
-> and the replacement, I have to escape the forward slash in the
-> replacement pattern so that `sed` doesn't get confused. If I ran
-> it without the escape, I get an error message.
-
-```
-clear
-gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' -print \) -execdir git status -s \; | \
-    gtee find-result.txt | \
-    gsed 's/^[ ?].*/unmerged/g' | \
-    gtee sed-result.txt | \
-    guniq | \
-    gtee uniq-result.txt | \
-    gsed 's//.git//g'
-```
-
-> Not a very helpful message. When you see something like that, it
-> usually means the slashes are all messed up.
-
-```
-clear
-gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' -print \) -execdir git status -s \; | \
-    gsed 's/^[ ?].*/unmerged/g' | \
-    guniq | \
-    gsed 's/\/.git//g'
+gfind dir \( -type d -name 'node_modules' -prune \) \
+        -o \( -type d -name '.git' -print \)
 ```
 
 # Slide 17
 
-> Finally, I'd like to print this in a nice way. I'm going to do
-> this in two steps, first using `sed` to move the "unmerged"
-> lines onto the preceeding lines, and then print it in pretty
-> columns. The problems is that `sed` normally works on a
-> line-by-line basis and these are multiple lines that I'm dealing
-> with. To enable that, I can turn on `sed`'s multiline mode. I'm
-> going to do this in stages, so that you can see how to build up
-> a command.
+Now, that prints just the Git directories which is what I
+wanted. It'd be great to run the `git status` command from
+those directories to get the remote for the repository.
+Luckily, `find` has an "execdir" argument that I can use to
+do just that.
 
 ```
 clear
-gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' -print \) -execdir git status -s \; | \
-    gsed 's/^[ ?].*/unmerged/g' | \
-    guniq | \
-    gsed 's/\/.git//g' | \
-    gsed '/$/{N;s/\nunmerged/ unmerged/}'
+gfind dir \( -type d -name 'node_modules' -prune \) \
+        -o \( -type d -name '.git' -print \) \
+        -execdir git status -s \;
 ```
 
-> This worked, kind of. What's going on, here? If I look at one of
-> the previous results, I can investigate.
+This will run the `git status -s` command in the directories
+that matched the `find` command.
 
-```
-bat uniq-result.txt
-```
+# Slide 18
 
-> Ah, it seems that as `sed` was going along, it matched the first
-> two lines and combined them. Then, it did the next two and combined
-> them. If I keep going by twos, I get to a place, here on line 15,
-> where `sed` has skipped over a good match because it's already read
-> the previous line. What I need to do is tell `sed` to put back line
-> 14 into its scanning buffer so that it can be used on the next line.
-> `sed` has some pretty powerful tools to be able to do that, including
-> its own minilanguage for branching. That's what I'm going to use, here.
+If there are modifications in the repository, I'd like to
+take all of the lines and collapse them into a single line.
+Earlier, I used the `uniq` command to remove duplicate
+lines. What I want to do is take these lines that contain
+the changes and turn them into a single message line. I'm
+going to use a new command to do this, a command called
+`sed` which means "stream editor". It allows you to do
+complex substitutions on input. Let me please provide an
+example. Here's the content of one of those files that I
+diffed earlier. `sed` can do substitutions pretty easily.
 
 ```
 clear
-«do not hit enter, type as you explain
-gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' -print \) -execdir git status -s \; | \
-    gsed 's/^[ ?].*/unmerged/g' | \
-    guniq | \
-    gsed 's/\/.git//g' | \
-    gsed '/$/{N;s/\nunmerged/ unmerged/;P;D}'
+gecho 'Hello, Curtis.' | gsed 's/Curtis/Brittany/g'
 ```
 
-> I've added two new things, here. These are `sed` instructions. If the
-> pattern fails to match, then these extra instructions will run. The
-> first instruction, "P", means print out the line that `sed` is currently
-> scanning, and the "D" instruction means "put back any extra stuff so that
-> you can try to match it on the next round".
+The syntax is "s" for substitution, then a slash, then the
+pattern to match, then a slash, then what you want to
+replace it with, then a slash, and I add the "g" to mean
+replace _all_ occurrences. In this case, the output from
+`echo`, the message "Hello, Curtis.", was the input for
+`sed` which replaced all occurrences of "Curtis" with
+"Brittany". This can also work on patterns using a
+regular expressions language.
+
+```
+gecho "Hello, Curtis." | gsed 's/H[a-z]*/Ahoj/g'
+```
+
+In this case, it matches anything that begins with a capital
+"H" followed by zero or more lower case letters. What ever
+it matches, it replaces it with "Ahoj". If I add more to the
+string,
+
+```
+gecho "Hello, Curtis Hero." | gsed 's/H[a-z]*/Ahoj/g'
+```
+
+It replaces both of the words that begin with capital "H". I
+can use this pattern matching to match the status lines.
+
+```
+clear
+gfind dir \( -type d -name 'node_modules' -prune \) \
+        -o \( -type d -name '.git' -print \) \
+        -execdir git status -s \;
+```
+
+I want to replace all of these status lines with a message
+so that I can use `uniq` to remove the duplicates. When I
+look at these lines, I want to replace any line that does
+not begin with a forward slash.
+
+
+```
+clear
+«do not hit enter»
+gfind dir \( -type d -name 'node_modules' -prune \) \
+        -o \( -type d -name '.git' -print \) \
+        -execdir git status -s \; | \
+    gsed 's/^[^\/].*/unmerged/g'
+```
+
+Regular expressions are a thing unto themselves, but the
+pattern that I created matches any line that does not begin
+with a slash and replaces that whole line with the word
+"unmerged".
 
 ```
 «hit enter»
 ```
 
-> That looks right to me! Now, I'd like to get those "unmerged" messages to
-> the left side. I'm going to use a new program to do this, `gawk`, which
-> breaks apart each line into different pieces that I can then process
-> individually. By default, `gawk` splits on whitespace, so I think I've
-> set myself up for happiness, here.
+I'm going to make sure that I haven't messed anything up,
+that things are properly replaced. I'd like to take the
+output of the `find` statement and save it to a file AND
+continue to continue passing the output to the `sed`
+statement. I can do that with the `tee` command. The `tee`
+command saves the input it receives to a file _and_ prints
+it out unchanged.
+
+```
+clear
+gfind dir \( -type d -name 'node_modules' -prune \) \
+        -o \( -type d -name '.git' -print \) \
+        -execdir git status -s \; | \
+    gtee status-results.txt | \
+    gsed 's/^[^\/].*/unmerged/g' | \
+    gtee sed-results.txt
+```
+
+Everything still printed out, but you can see that there are
+status-results.txt and sed-results.txt files. I'll run a
+diff to make sure that the correct lines were replaced.
+
+```
+kdiff status-result.txt sed-results.txt
+```
+
+You can see the lines that I wanted to replace are now
+replaced. Now, I'd like to remove all of the duplicate
+"unmerged" lines. I'll save that output to a file, too, to
+make sure that things are getting properly reduced.
+
+```
+clear
+gfind dir \( -type d -name 'node_modules' -prune \) \
+        -o \( -type d -name '.git' -print \) \
+        -execdir git status -s \; | \
+    gsed 's/^[^\/].*/unmerged/g' | \
+    guniq
+```
+
+You can see that all of those original messages are now
+reduced to a single message. I'm going to do one more thing,
+and get rid of that "/.git" at the end of each of those
+directory names. Again, I'll use `sed` for that.
+
+```
+clear
+gfind dir \( -type d -name 'node_modules' -prune \) \
+        -o \( -type d -name '.git' -print \) \
+        -execdir git status -s \; | \
+    gsed 's/^[^\/].*/unmerged/g' | \
+    guniq | \
+    gsed 's/\/.git$//g'
+```
+
+# Slide 19
+
+Finally, I'd like to print this in a nice way. I'm going to
+do this in two steps, first using `sed` to combine the
+"unmerged" lines onto the preceeding lines, and then print
+it in pretty columns. The problems is that `sed` normally
+works on a line-by-line basis and these are multiple lines
+that I'm dealing with. To enable that, I can turn on `sed`'s
+multiline mode which gets a little archaic, but if you like
+`sed`, it's worth reading about.
+
+```
+clear
+gfind dir \( -type d -name 'node_modules' -prune \) \
+        -o \( -type d -name '.git' -print \) \
+        -execdir git status -s \; | \
+    gsed 's/^[^\/].*/unmerged/g' | \
+    guniq | \
+    gsed 's/\/.git$//g' | \
+    gsed '/$/{N;s/\nunmerged/ unmerged/;P;D}'
+```
+
+That looks right to me! Now, I'd like to get those
+"unmerged" messages to the left side. I'm going to use a new
+program to do this, `gawk`, which breaks apart each line
+into different pieces that I can then process individually.
+By default, `gawk` splits on whitespace, so I think I've set
+myself up for happiness, here.
 
 ```
 clear
@@ -822,10 +711,11 @@ gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git'
     gawk '{ printf "%-10s %s\n", $2, $1; }'
 ```
 
-> I'm using a `printf` statement, here, to do formatted printing. that
-> does padding and stuff. I'm almost done, here. I'd like to fill in the
-> empty spaces with the word "merged". I can do that with `gawk` because
-> it understands conditionals and ternary expressions.
+I'm using a `printf` statement, here, to do formatted
+printing. that does padding and stuff. I'm almost done,
+here. I'd like to fill in the empty spaces with the word
+"merged". I can do that with `gawk` because it understands
+conditionals and ternary expressions.
 
 ```
 clear
@@ -834,13 +724,14 @@ gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git'
     guniq | \
     gsed 's/\/.git//g' | \
     gsed '/$/{N;s/\nunmerged/ unmerged/;P;D}' | \
-    gawk '{ printf "%-10s %s\n", ($2 == "")? "merged" : $2, $1; }'
+    gawk '{ printf "%-10s %s\n", ($2 == "")? "clean" : $2, $1; }'
 ```
 
-> It'd be really nice if I could add color to this, too. I mention that
-> because I can. To make color in a shell, you have to use escape codes.
-> It's ugly, but not difficult to understand. I'm going to mark each of
-> the unmerged colors as red, and I'll use `sed` to do this.
+It'd be really nice if I could add color to this, too. I
+mention that because I can. To make color in a shell, you
+have to use escape codes. It's ugly, but not difficult to
+understand. I'm going to mark each of the unmerged colors as
+red, and I'll use `sed` to do this.
 
 ```
 clear
@@ -849,19 +740,16 @@ gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git'
     guniq | \
     gsed 's/\/.git//g' | \
     gsed '/$/{N;s/\nunmerged/ unmerged/;P;D}' | \
-    gawk '{ printf "%-10s %s\n", ($2 == "")? "merged" : $2, $1; }' | \
+    gawk '{ printf "%-10s %s\n", ($2 == "")? "clean" : $2, $1; }' | \
     gsed '/^unmerged/{s/\(.*\)/\\\\e[31m\\\\e[1m\1\\\\e[0m/}'
 ```
 
-> This uses more complex regular expressions, which is a topic beyond
-> the scope of this presentation, but is a powerful tool when it comes
-> to text processing, not only on the command line, but in many text
-> editors. What this statement does is for any line that starts with
-> the text "unmerged", do a substitution by gathering all of the
-> characters, and putting them between the "31m" thing and the "0m"
-> escape codes. The "31m" makes it red, the "1m" makes it bold, and
-> the "0m" resets everything. Now, to get those turned into colors, I
-> need to use `echo` with the `-e` flag.
+This uses shell escape codes, putting the content of a line
+that begins with "unmerged" between the "31m" thing and the
+"0m" escape codes. The "31m" makes it red, the "1m" makes it
+bold, and the "0m" resets everything. Now, to get those
+turned into colors, I need to use `echo` with the `-e` flag
+and to wrap the whole thing in quotation marks.
 
 ```
 clear
@@ -870,138 +758,51 @@ gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git'
     guniq | \
     gsed 's/\/.git//g' | \
     gsed '/$/{N;s/\nunmerged/ unmerged/;P;D}' | \
-    gawk '{ printf "%-10s %s\n", ($2 == "")? "merged" : $2, $1; }' | \
-    gsed '/^unmerged/{s/\(.*\)/\\\\e[31m\\\\e[1m\1\\\\e[0m/}' | \
-    gxargs gecho -e
-```
-
-> Well, that almost has it. Things are properly colorized, but I've lost
-> the newlines. That's because the text that's being passed in isn't
-> wrapped in quotes and the shell essentially removes the new lines for
-> us. Thanks, shell. I can fix this many ways, but I want to show you how
-> to do it with the `xargs` command. Normally, `xargs` just appends whatever
-> is coming to the end of the command that it's given. I want to wrap that.
-> `xargs` allows me to store the input into a variable and use that in the
-> command wherever I want, so that I can truly customize what `xargs` runs.
-> I do that with the `-I` flag.
-
-```
-clear
-gfind ~/dev \( -type d -name 'node_modules' -prune \) -o \( -type d -name '.git' -print \) -execdir git status -s \; | \
-    gsed 's/^[ ?].*/unmerged/g' | \
-    guniq | \
-    gsed 's/\/.git//g' | \
-    gsed '/$/{N;s/\nunmerged/ unmerged/;P;D}' | \
-    gawk '{ printf "%-10s %s\n", ($2 == "")? "merged" : $2, $1; }' | \
+    gawk '{ printf "%-10s %s\n", ($2 == "")? "clean" : $2, $1; }' | \
     gsed '/^unmerged/{s/\(.*\)/\\\\e[31m\\\\e[1m\1\\\\e[0m/}' | \
     gxargs -I _ gecho -e "_"
 ```
 
-> That stores all of the input into a variable named "_", and then I use
-> it in the statement by wrapping it in quotation marks. Now, I have a
-> script that highlights this for me! This is nice. I can take this and
-> wrap it up into an alias for my shell. I'll show you what I mean. First,
-> I copy the command that I want to use. Then, I open the file that I use
-> to define aliases.
-
-```
-«this is custom for my machine»
-nvim ~/dev/dotfiles/zsh-custom/aliases.sh
-```
-
-> I create a custom function named "git-dir-status" for the command, paste
-> it in, do some formatting, save it, close the editor, reload my configuration,
-> and now it works for any directory I'm in.
-
-# Slide 18
-
-> The tools used, here, were `find` to be able to find directories and ignore
-> other directories. We also used it to run the `git status` command in the
-> directories that it found. Then, I used `sed` to manipulate the output, both
-> with single lines and doing more complex multiline matching.
-
-# Slide 19
-
-> I used `tee` during the development of the command to make sure that I was
-> doing the right thing which can be a powerful debugging tool for you when
-> working with the command line. I also used `gawk` to do some sophisticated
-> processing of the content of each line, pretty printing it.
+And, in much the same way I built a shell function to
+contain all of this.
 
 # Slide 20
 
-> I used `xargs` with the `-I` flag to be able to place the input properly
-> with the `echo` statement. I used the `echo` command with the `-e` flag
-> to enable shell escape codes and print things in color.
+The tools used, here, were `find` to be able to find
+directories and ignore other directories. We also used it to
+run the `git status` command in the directories that it
+found. Then, I used `sed` to manipulate the output, both
+with single lines and doing more complex multiline matching.
 
 # Slide 21
 
-> Tabs vs. spaces. That's still a thing. So, I'm going to show you two great
-> utilities in case you ever get some files that you want to convert between
-> the two. I'm going to use `bat`, again, to show the contents of a file.
-> I'm going to use the `--show-all` flag to have it print the white spaces,
-> too.
-
-```
-clear
-bat --show-all ./code/ackermann/ackermann.py
-```
-
-> You can see the dots that show the spaces in the file. Each indent is four
-> spaces large. Now, there are some people that love tabs, for whatever reason.
-> If I were one of them, I can use the `unexpand` utility to unexpand spaces
-> back into tabs.
-
-```
-clear
-man gunexpand
-```
-
-> As you can see, it does what I want, converting spaces to tabs. The default
-> is eight spaces to one tab. My file has four spaces to one tab, so I need to
-> use the `-t` argument to specify four spaces per tab.
-
-```
-clear
-gunexpand -t 4 ./code/ackermann/ackermann.py
-```
-
-> Well, that did _something_. To check to make sure that there are really tabs
-> in this instead of spaces, I'll use `bat --show-all` to view the unprintable
-> characters.
-
-```
-clear
-gunexpand -t 4 ./code/ackermann/ackermann.py | bat --show-all
-```
-
-> You can see that it now has tabs instead of spaces as shown by these neat
-> fences in the output. The `expand` utility would take these tabs and replace
-> those with spaces. To save this new output, I would redirect the output to
-> a new file.
-
-```
-clear
-gunexpand -t 4 ./code/ackermann/ackermann.py > ./code/ackermann/ackermann.tabs.py
-bat --show-all ./code/ackermann.tabs.py
-```
+I used `tee` during the development of the command to make
+sure that I was doing the right thing which can be a
+powerful debugging tool for you when working with the
+command line. I also used `gawk` to do some sophisticated
+processing of the content of each line, pretty printing it.
 
 # Slide 22
 
-> So, these are nice utilities to use to handle spaces and tabs, to convert back
-> and forth between one another.
+I used `xargs` with the `-I` flag to be able to place the
+input properly with the `echo` statement. I used the `echo`
+command with the `-e` flag to enable shell escape codes and
+print things in color.
 
 # Slide 23
 
-> So, I know that there are a million ways to do all of this. Some may seem
-> easier than what I have done, using Node.js, Ruby, Python, or Rust and the
-> active ecosystems out there for these things. One thing to note is that
-> if you have a Unix-like shell running somewhere, then these utilities are
-> likely already installed on that computer. If you spend a lot of time
-> working with large text files, the file system, or looking at output of
-> programs, then having these tools can come in pretty handy for you.
+So, I know that there are a million ways to do all of this.
+Some may seem easier than what I have done, using Node.js,
+Ruby, Python, or Rust and the active ecosystems out there
+for these things. One thing to note is that if you have a
+Unix-like shell running somewhere, then these utilities are
+likely already installed on that computer. If you spend a
+lot of time working with large text files, the file system,
+or looking at output of programs, then having these tools
+can come in pretty handy for you.
 
 # Slide 24
 
-> That concludes my presentation. I'm open to take questions or comments from
-> all of you that were kind enough to hang out until the end.
-
+That concludes my presentation. I'm open to take questions
+or comments from all of you that were kind enough to hang
+out until the end.

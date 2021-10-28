@@ -36,7 +36,7 @@ if __name__ == "__main__":
     parser.add_argument("m", type=int, help="The first argument to the Ackermann function")
     parser.add_argument("n", type=int, help="The second argument to the Ackermann function")
     parser.add_argument("--verbose", "-v", default=0, help="Print each calculation.", action="count")
-    parser.add_argument("--cache", "-c", default=0, help="Cache intermediate results.", action="count")
+    parser.add_argument("--cache", "-c", default=0, help="Use dynamic programming and cache intermediate results.", action="count")
     args = parser.parse_args()
     result = ackermann(**vars(args))
     print(result)

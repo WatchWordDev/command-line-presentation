@@ -18,7 +18,7 @@ do
   rainbow_print "host" "brittany baker"
   echo "\n"
   rainbow_print "presenter" "curtis schlak"
-  read -s -t 5 -k 1 KEY
+  read -s -t 10 -k 1 KEY
   if [[ "$KEY" == "x" ]]; then break; fi
   clear
 
@@ -39,6 +39,11 @@ do
   if [[ "$KEY" == "x" ]]; then break; fi
   clear
 done
+
+clear
+
+rainbow_print "<- <- <-" "slides on the left"
+read -s -k 1 KEY
 
 clear
 kitty @ set-colors --reset

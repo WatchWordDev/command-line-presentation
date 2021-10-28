@@ -1,9 +1,10 @@
 #!/usr/bin/env zsh
 kitty @ set-colors background=white
 
+basedir=$(dirname "$0")
 seq=1
 prefix="01"
-max="$(lsd --reverse *-slide.png | ghead -n 1 | gawk -F'-' '{ print $1; }')"
+max="$(gecho $(basename $(lsd --reverse ${basedir}/*-slide.png | ghead -n 1)) | gawk -F'-' '{ print $1; }')"
 
 cols=$(tput cols)
 lcols=$(($cols/2))
@@ -13,13 +14,13 @@ then
 else
   rcols=$lcols
 fi
-msgfmt="%-${lcols}s%${rcols}s"
+msgfmt="%-${lcols}s%${rcols}s\n"
 
-while [[ -f "${prefix}-slide.png" ]]
+while [[ -f "${basedir}/${prefix}-slide.png" ]]
 do
   clear
   printf $msgfmt "Slide ${prefix} of ${max}" "(n)ext|(p)rev|e(x)it"
-  kitty +kitten icat --align=left "${prefix}-slide.png"
+  kitty +kitten icat --align=center "${basedir}/${prefix}-slide.png"
   read -sk direction
   if [[ "$direction" == "p" ]]
   then
