@@ -33,6 +33,12 @@ do
   elif [[ "$direction" == "x" ]]
   then
     seq=$(($max+100))
+  elif [[ "$direction" == "g" ]]
+  then
+    read -s num
+    seq=$((num + 0))
+    if [[ $seq -lt 1 ]]; then seq=1; fi
+    if [[ $seq -gt $max ]]; then seq=$max; fi
   fi
   if [ $seq -lt 10 ]
   then

@@ -17,3 +17,7 @@ function prev-slide () {
 function exit-slide () {
   move-slide "x"
 }
+
+function goto-slide () {
+  move-slide "g$1\n"
+}
